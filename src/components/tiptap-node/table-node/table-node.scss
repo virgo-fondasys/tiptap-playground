@@ -1,0 +1,364 @@
+:root {
+  /* Table colors - Light mode */
+  --tiptap-table-bg: var(--white);
+  --tiptap-table-border: var(--tt-gray-light-a-300);
+  --tiptap-table-border-hover: var(--tt-gray-light-a-400);
+
+  --tiptap-table-header-bg: var(--tt-gray-light-100);
+  --tiptap-table-header-text: var(--tt-gray-light-800);
+
+  --tiptap-table-cell-bg: var(--white);
+  --tiptap-table-cell-text: var(--tt-gray-light-700);
+
+  --tiptap-table-row-hover: var(--tt-gray-light-50);
+  --tiptap-table-row-stripe: var(--tt-gray-light-a-50);
+
+  --tiptap-table-selected-bg: var(--tt-selection-color);
+  --tiptap-table-selected-border: var(--tt-brand-color-400);
+
+  --tiptap-table-resize-handle: var(--tt-brand-color-500);
+  --tiptap-table-grip-bg: var(--tt-gray-light-200);
+  --tiptap-table-grip-hover: var(--tt-brand-color-100);
+  --tiptap-table-grip-selected: var(--tt-brand-color-500);
+}
+
+.dark {
+  /* Table colors - Dark mode */
+  --tiptap-table-bg: var(--tt-gray-dark-50);
+  --tiptap-table-border: var(--tt-gray-dark-a-300);
+  --tiptap-table-border-hover: var(--tt-gray-dark-a-400);
+
+  --tiptap-table-header-bg: var(--tt-gray-dark-100);
+  --tiptap-table-header-text: var(--tt-gray-dark-800);
+
+  --tiptap-table-cell-bg: var(--tt-gray-dark-50);
+  --tiptap-table-cell-text: var(--tt-gray-dark-700);
+
+  --tiptap-table-row-hover: var(--tt-gray-dark-100);
+  --tiptap-table-row-stripe: var(--tt-gray-dark-a-50);
+
+  --tiptap-table-selected-bg: var(--tt-selection-color);
+  --tiptap-table-selected-border: var(--tt-brand-color-400);
+
+  --tiptap-table-resize-handle: var(--tt-brand-color-400);
+  --tiptap-table-grip-bg: var(--tt-gray-dark-200);
+  --tiptap-table-grip-hover: var(--tt-brand-color-900);
+  --tiptap-table-grip-selected: var(--tt-brand-color-400);
+}
+
+/* Base table styles */
+.tiptap-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5rem 0;
+  table-layout: fixed;
+  overflow: hidden;
+  border-radius: var(--tt-radius-md);
+  border: 1px solid var(--tiptap-table-border);
+  background-color: var(--tiptap-table-bg);
+
+  /* Table wrapper for horizontal scrolling */
+  &-wrapper {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-radius: var(--tt-radius-md);
+
+    &::-webkit-scrollbar {
+      height: 0.5rem;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--tt-scrollbar-color);
+      border-radius: var(--tt-radius-sm);
+    }
+  }
+}
+
+/* TipTap ProseMirror table structure */
+.tiptap {
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1.5rem 0;
+    table-layout: fixed;
+    overflow: hidden;
+    border-radius: var(--tt-radius-md);
+    border: 1px solid var(--tiptap-table-border);
+    background-color: var(--tiptap-table-bg);
+
+    /* Header cells */
+    th {
+      background-color: var(--tiptap-table-header-bg);
+      color: var(--tiptap-table-header-text);
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--tiptap-table-border);
+      position: relative;
+      vertical-align: top;
+      box-sizing: border-box;
+
+      &.selectedCell {
+        background-color: var(--tiptap-table-selected-bg);
+        border-color: var(--tiptap-table-selected-border);
+      }
+
+      /* Column grip handle for selection */
+      .grip-column {
+        position: absolute;
+        top: -0.75rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1.25rem;
+        height: 0.75rem;
+        background-color: var(--tiptap-table-grip-bg);
+        border-radius: var(--tt-radius-xs);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color var(--tt-transition-duration-short)
+          var(--tt-transition-easing-default);
+
+        &:hover {
+          background-color: var(--tiptap-table-grip-hover);
+        }
+
+        &.selected {
+          background-color: var(--tiptap-table-grip-selected);
+        }
+      }
+    }
+
+    /* Regular cells */
+    td {
+      background-color: var(--tiptap-table-cell-bg);
+      color: var(--tiptap-table-cell-text);
+      font-size: 0.875rem;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--tiptap-table-border);
+      position: relative;
+      vertical-align: top;
+      box-sizing: border-box;
+      min-width: 100px;
+
+      &.selectedCell {
+        background-color: var(--tiptap-table-selected-bg);
+        border-color: var(--tiptap-table-selected-border);
+      }
+
+      /* Row grip handle for selection */
+      .grip-row {
+        position: absolute;
+        left: -0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0.75rem;
+        height: 1.25rem;
+        background-color: var(--tiptap-table-grip-bg);
+        border-radius: var(--tt-radius-xs);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color var(--tt-transition-duration-short)
+          var(--tt-transition-easing-default);
+
+        &:hover {
+          background-color: var(--tiptap-table-grip-hover);
+        }
+
+        &.selected {
+          background-color: var(--tiptap-table-grip-selected);
+        }
+      }
+    }
+
+    /* Row styles */
+    tr {
+      transition: background-color var(--tt-transition-duration-short)
+        var(--tt-transition-easing-default);
+
+      /* Hover effect on non-header rows */
+      &:not(:first-child):hover td {
+        background-color: var(--tiptap-table-row-hover);
+      }
+    }
+
+    /* Striped rows variant */
+    &.striped tbody tr:nth-child(even) td {
+      background-color: var(--tiptap-table-row-stripe);
+    }
+
+    /* Column resize handle */
+    .column-resize-handle {
+      position: absolute;
+      top: 0;
+      right: -2px;
+      bottom: -2px;
+      width: 4px;
+      background-color: var(--tiptap-table-resize-handle);
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    /* Table selected state */
+    &.tableWrapper.has-focus {
+      border-color: var(--tiptap-table-selected-border);
+    }
+  }
+
+  /* Table wrapper for overflow handling */
+  .tableWrapper {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    padding: 0.25rem 0;
+
+    &::-webkit-scrollbar {
+      height: 0.5rem;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--tt-scrollbar-color);
+      border-radius: var(--tt-radius-sm);
+    }
+
+    table {
+      margin: 0;
+    }
+  }
+
+  /* Resize cursor when resizing columns */
+  &.resize-cursor {
+    cursor: ew-resize;
+    cursor: col-resize;
+  }
+}
+
+/* Cell content styling */
+.tiptap table th,
+.tiptap table td {
+  > p {
+    margin: 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  > ul,
+  > ol {
+    margin: 0.5rem 0;
+    padding-left: 1.25rem;
+  }
+
+  /* Support for nested content */
+  > *:first-child {
+    margin-top: 0;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Table menu/controls */
+.tiptap-table-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  background-color: var(--tt-card-bg-color);
+  border: 1px solid var(--tt-card-border-color);
+  border-radius: var(--tt-radius-md);
+  box-shadow: var(--tt-shadow-elevated-md);
+
+  &-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: var(--tt-radius-sm);
+    color: var(--tiptap-table-cell-text);
+    cursor: pointer;
+    transition: background-color var(--tt-transition-duration-short)
+      var(--tt-transition-easing-default);
+
+    &:hover {
+      background-color: var(--tiptap-table-row-hover);
+    }
+
+    &:active {
+      background-color: var(--tiptap-table-grip-hover);
+    }
+
+    &.active {
+      background-color: var(--tiptap-table-selected-bg);
+      color: var(--tt-brand-color-600);
+    }
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  &-divider {
+    width: 1px;
+    height: 1.5rem;
+    background-color: var(--tiptap-table-border);
+    margin: 0 0.25rem;
+  }
+}
+
+/* Cell alignment utilities */
+.tiptap table {
+  th,
+  td {
+    &[data-text-align="left"] {
+      text-align: left;
+    }
+
+    &[data-text-align="center"] {
+      text-align: center;
+    }
+
+    &[data-text-align="right"] {
+      text-align: right;
+    }
+
+    &[data-text-align="justify"] {
+      text-align: justify;
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .tiptap table {
+    th,
+    td {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8125rem;
+    }
+  }
+}
+

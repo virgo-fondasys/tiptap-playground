@@ -1,0 +1,75 @@
+.tiptap.ProseMirror {
+  --shopping-card-bg: var(--tt-gray-light-a-50);
+  --shopping-card-border: var(--tt-gray-light-a-200);
+  --shopping-card-label-color: var(--tt-gray-light-a-700);
+  --shopping-card-input-bg: var(--tt-bg-color);
+  --shopping-card-input-border: var(--tt-gray-light-a-200);
+  --shopping-card-input-focus: var(--tt-gray-light-a-400);
+
+  .dark & {
+    --shopping-card-bg: var(--tt-gray-dark-a-50);
+    --shopping-card-border: var(--tt-gray-dark-a-200);
+    --shopping-card-label-color: var(--tt-gray-dark-a-700);
+    --shopping-card-input-bg: var(--tt-gray-dark-a-100);
+    --shopping-card-input-border: var(--tt-gray-dark-a-200);
+    --shopping-card-input-focus: var(--tt-gray-dark-a-400);
+  }
+}
+
+/* =====================
+   SHOPPING CARD NODE
+   ===================== */
+.shopping-card-node-view-wrapper {
+  margin: 1.5rem 0;
+}
+
+.shopping-card-form {
+  background-color: var(--shopping-card-bg);
+  border: 1px solid var(--shopping-card-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.shopping-card-form .form-group {
+  margin-bottom: 1.25rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.shopping-card-form label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--shopping-card-label-color);
+  margin-bottom: 0.5rem;
+}
+
+.shopping-card-form input,
+.shopping-card-form textarea {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: var(--tt-theme-text);
+  background-color: var(--shopping-card-input-bg);
+  border: 1px solid var(--shopping-card-input-border);
+  border-radius: 6px;
+  transition: border-color 0.15s ease-in-out;
+
+  &:focus {
+    outline: none;
+    border-color: var(--shopping-card-input-focus);
+  }
+
+  &::placeholder {
+    color: var(--shopping-card-label-color);
+    opacity: 0.6;
+  }
+}
+
+.shopping-card-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}

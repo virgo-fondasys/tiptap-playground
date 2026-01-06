@@ -54,24 +54,20 @@ body,
   font-family: "DM Sans", sans-serif;
 }
 
-.simple-editor-wrapper {
-  width: 100vw;
-  height: 100vh;
-  overflow: auto;
-}
-
 .simple-editor-content {
   max-width: 648px;
   width: 100%;
-  margin: 0 auto;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
   flex: 1;
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  overflow-y: auto;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  white-space: pre;
 }
 
 .simple-editor-content .tiptap.ProseMirror.simple-editor {
-  flex: 1;
   padding: 3rem 3rem 30vh;
 }
 
@@ -79,4 +75,43 @@ body,
   .simple-editor-content .tiptap.ProseMirror.simple-editor {
     padding: 1rem 1.5rem 30vh;
   }
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.simple-editor-wrapper {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.json-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--tt-border-color);
+  background-color: var(--tt-bg-color);
+  overflow: hidden;
+}
+
+.json-panel-header {
+  padding: 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--tt-border-color);
+  flex-shrink: 0;
+}
+
+.json-panel pre {
+  flex: 1;
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  overflow-y: auto;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  white-space: pre;
 }

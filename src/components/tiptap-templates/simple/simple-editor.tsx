@@ -34,6 +34,8 @@ import "@/components/tiptap-node/list-node/list-node.scss";
 import "@/components/tiptap-node/image-node/image-node.scss";
 import "@/components/tiptap-node/heading-node/heading-node.scss";
 import "@/components/tiptap-node/paragraph-node/paragraph-node.scss";
+import "@/components/tiptap-node/table-node/table-node.scss";
+import "@/components/tiptap-node/shopping-card-node/shopping-card-node.scss";
 
 // --- Tiptap UI ---
 import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu";
@@ -73,6 +75,9 @@ import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
 
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss";
+import { TableButton } from "@/components/tiptap-ui/table-button/table-button";
+import shoppingCardExtension from "@/components/tiptap-extension/shopping-card/shopping-card-extension";
+import { ShoppingCardButton } from "@/components/tiptap-ui/shopping-card-button/shopping-card-button";
 
 const MainToolbarContent = ({
   onHighlighterClick,
@@ -102,6 +107,8 @@ const MainToolbarContent = ({
         />
         <BlockquoteButton />
         <CodeBlockButton />
+        <TableButton />
+        <ShoppingCardButton />
       </ToolbarGroup>
 
       <ToolbarSeparator />
@@ -188,6 +195,9 @@ export function SimpleEditor() {
   const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
     "main"
   );
+  const [editorResult, setEditorResult] = useState("");
+  const [toolbarHeight, setToolbarHeight] = useState(0);
+
   const toolbarRef = useRef<HTMLDivElement>(null);
 
   const editor = useEditor({
@@ -219,7 +229,11 @@ export function SimpleEditor() {
       Superscript,
       Subscript,
       Selection,
-      TableKit,
+      TableKit.configure({
+        table: {
+          resizable: true,
+        },
+      }),
       ImageUploadNode.configure({
         accept: "image/*",
         maxSize: MAX_FILE_SIZE,
@@ -227,53 +241,71 @@ export function SimpleEditor() {
         upload: handleImageUpload,
         onError: (error) => console.error("Upload failed:", error),
       }),
+      shoppingCardExtension,
     ],
+    onUpdate: ({ editor }) => {
+      setEditorResult(JSON.stringify(editor.getJSON(), null, 2) || "");
+    },
+    content: `
+    <p>Welcome to the simple Tiptap editor!</p>
+    <p>Try out the various formatting options available in the toolbar above.</p>
+    <shopping-card name="hello"></shopping-card>
+    `,
   });
 
   const rect = useCursorVisibility({
     editor,
-    overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
+    overlayHeight: toolbarHeight,
   });
 
   useEffect(() => {
-    if (!isMobile && mobileView !== "main") {
-      setMobileView("main");
+    if (toolbarRef.current) {
+      setToolbarHeight(toolbarRef.current.getBoundingClientRect().height);
     }
-  }, [isMobile, mobileView]);
+  }, [mobileView]);
+
+  if (!isMobile && mobileView !== "main") {
+    setMobileView("main");
+  }
 
   return (
-    <div className="simple-editor-wrapper">
-      <EditorContext.Provider value={{ editor }}>
-        <Toolbar
-          ref={toolbarRef}
-          style={{
-            ...(isMobile
-              ? {
-                  bottom: `calc(100% - ${height - rect.y}px)`,
-                }
-              : {}),
-          }}
-        >
-          {mobileView === "main" ? (
-            <MainToolbarContent
-              onHighlighterClick={() => setMobileView("highlighter")}
-              onLinkClick={() => setMobileView("link")}
-              isMobile={isMobile}
-            />
-          ) : (
-            <MobileToolbarContent
-              type={mobileView === "highlighter" ? "highlighter" : "link"}
-              onBack={() => setMobileView("main")}
-            />
-          )}
-        </Toolbar>
-
-        <EditorContent
-          editor={editor}
-          role="presentation"
-          className="simple-editor-content"
-        />
-      </EditorContext.Provider>
+    <div className="container">
+      <div className="simple-editor-wrapper">
+        <EditorContext.Provider value={{ editor }}>
+          <Toolbar
+            ref={toolbarRef}
+            style={{
+              ...(isMobile
+                ? {
+                    bottom: `calc(100% - ${height - rect.y}px)`,
+                  }
+                : {}),
+            }}
+          >
+            {mobileView === "main" ? (
+              <MainToolbarContent
+                onHighlighterClick={() => setMobileView("highlighter")}
+                onLinkClick={() => setMobileView("link")}
+                isMobile={isMobile}
+              />
+            ) : (
+              <MobileToolbarContent
+                type={mobileView === "highlighter" ? "highlighter" : "link"}
+                onBack={() => setMobileView("main")}
+              />
+            )}
+          </Toolbar>
+          <EditorContent
+            editor={editor}
+            role="presentation"
+            className="simple-editor-content"
+          />
+        </EditorContext.Provider>
+      </div>
+      <div className="json-panel">
+        <div className="json-panel-header">JSON Output</div>
+        <pre>{editorResult}</pre>
+      </div>
     </div>
   );
 }
